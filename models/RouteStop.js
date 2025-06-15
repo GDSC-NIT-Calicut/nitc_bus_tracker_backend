@@ -23,7 +23,7 @@ const RouteStop = sequelize.define('RouteStop', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  eta_offset_minuts: {
+  eta_offset_minutes: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
