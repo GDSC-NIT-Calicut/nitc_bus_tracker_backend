@@ -59,7 +59,10 @@ exports.partial_registration = async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash password with salt rounds = 10
+    let hashedPassword = null;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
     await User.create({
       name,
