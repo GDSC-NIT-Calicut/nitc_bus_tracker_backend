@@ -3,25 +3,20 @@ const Bus = require('../models/Bus');
 // Get all buses
 exports.getBuses = async (req, res) => {
   try {
-    // 1. Get latest timestamp per bus_id
-    const latest = await Bus.findAll({
-      attributes: [
-        'bus_id',
-        [Sequelize.fn('MAX', Sequelize.col('lastUpdated')), 'lastUpdated']
-      ],
-      group: ['bus_id'],
-      raw: true
-    });
+    const buses = await sequelize.query(
+      `SELECT b1.*
+       FROM Buses b1
+       INNER JOIN (
+         SELECT bus_id, MAX(lastUpdated) AS latest
+         FROM Buses
+         GROUP BY bus_id
+       ) b2 ON b1.bus_id = b2.bus_id AND b1.lastUpdated = b2.latest`,
+      {
+        type: QueryTypes.SELECT
+      }
+    );
 
-    // 2. For each bus_id, get the full row with that timestamp
-    const buses = await Promise.all(latest.map(async ({ bus_id, lastUpdated }) => {
-      return await Bus.findOne({
-        where: { bus_id, lastUpdated },
-        attributes: ['bus_id', 'latitude', 'longitude', 'lastUpdated']
-      });
-    }));
-
-    res.json(buses.filter(Boolean));
+    res.json(buses);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
