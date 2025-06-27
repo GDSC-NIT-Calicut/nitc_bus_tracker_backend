@@ -25,7 +25,7 @@ exports.login = async (req, res) => {
         return res.status(403).json({ error: 'Access denied: Not a student' });
       }
     } else {
-      if (user.role === 'driver' || user.role === 'admin') {
+      if (user.role === 'driver' || user.role === 'admin' || user.role == 'default') {
         return res.json({ success: true, role: user.role, message: `${user.role} login successful` });
       } else {
         return res.status(403).json({ error: 'Access denied: Not driver/admin' });
