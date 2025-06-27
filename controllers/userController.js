@@ -123,21 +123,26 @@ exports.user_exists = async (req, res) => {
 
 exports.get_user_info = async (req, res) => {
   const email = req.query.email;
+  if (!email) return res.status(400).json({ error: 'Email required' });
+
   try {
     const user = await User.findOne({ where: { email } });
-    if (user) {
-      res.status(200).json({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        hostel: user.hostel
-      });
-    } else {
-      res.json({ error: "User not found!" });
-    }
+    if (!user) return res.json({ exists: false });
+
+    const needsMoreInfo = !(user.username && user.phone && user.role);
+
+    res.json({
+      exists: true,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      hostel: user.hostel,
+      username: user.username,
+      role: user.role,
+      needsMoreInfo
+    });
   } catch (err) {
-    console.error('Error fetching user info:', err);
-    res.status(500).json({ error: 'Failed to fetch user' });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
