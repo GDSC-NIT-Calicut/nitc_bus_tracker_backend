@@ -6,4 +6,6 @@ router.get('/get', noticeController.getNotices);
 
 router.post('/post', noticeController.postNotice);
 
+router.delete('/delete/:topic', noticeController.deleteNotice);
+
 module.exports = router;
