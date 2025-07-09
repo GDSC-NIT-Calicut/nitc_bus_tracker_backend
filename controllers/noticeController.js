@@ -1,4 +1,5 @@
 const Notice = require('../models/Notice');
+const { Op } = require('sequelize');
 
 exports.getNotices = async (req, res) => {
   try {
@@ -11,9 +12,9 @@ exports.getNotices = async (req, res) => {
 };
 
 exports.postNotice = async (req, res) => {
-  const { name, topic, to_whom, message } = req.body;
+  const { name, topic, to_whom, message, validTill } = req.body;
   try {
-    await Notice.create({name, topic, to_whom, message});
+    await Notice.create({name, topic, to_whom, message, validTill});
     res.status(201).json({ success: true, message: 'Added Notice successfully'});
 
   } catch (err) {

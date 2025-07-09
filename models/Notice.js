@@ -28,6 +28,10 @@ const Notice = sequelize.define('Notice', {
     defaultValue: DataTypes.NOW,
     allowNull: false
   },
+  validTill: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
 }, {
   tableName: 'Notice',
   timestamps: false
