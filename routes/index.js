@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+router.use('/admin', require('./adminRoutes'));
 router.use('/bus', require('./busRoutes'));
 router.use('/stops', require('./stopRoutes'));
 router.use('/location', require('./locationRoutes'));

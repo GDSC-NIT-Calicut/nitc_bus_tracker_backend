@@ -24,6 +24,11 @@ const Location = sequelize.define('Location', {
     allowNull: false,
     defaultValue: DataTypes.NOW  // default to current timestamp
   },
+  isSharing: {
+     type: DataTypes.BOOLEAN,
+     allowNull: false,
+     defaultValue: true
+}
 }, {
   tableName: 'Location',
   timestamps: false
