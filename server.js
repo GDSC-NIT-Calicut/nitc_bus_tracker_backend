@@ -1,6 +1,6 @@
 const app = require('./app');
 const sequelize = require('./config/database');
-
+require('./jobs/cleanup');
 const PORT = 3000;
 
 async function startServer() {
