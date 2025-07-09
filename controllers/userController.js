@@ -110,6 +110,29 @@ exports.complete_registration = async (req, res) => {
   }
 };
 
+exports.edit_profile = async (req, res) => {
+  const { name, email, hostel, phone } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    user.name = name;
+    user.phone = phone;
+    user.hostel = hostel;
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'Profile Edit Successful!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 exports.user_exists = async (req, res) => {
   const email = req.query.email;
   try {
