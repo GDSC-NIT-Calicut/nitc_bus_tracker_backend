@@ -1,9 +1,15 @@
 const cron = require('node-cron');
 const db = require('../config/database');
 
+function nowIST() {
+  const istOffset = 5.5 * 60; // IST is UTC+5:30
+  const local = new Date(new Date().getTime() + istOffset * 60000);
+  return `[${local.toISOString().replace('T', ' ').substring(0, 19)} IST]`;
+}
+
 // run every minute
 cron.schedule('* * * * *', () => {
-    console.log('Running cleanup job…');
+    console.log(`${nowIST()} Running cleanup job…`);
 
     const query = `
         DELETE FROM Notice
@@ -12,9 +18,9 @@ cron.schedule('* * * * *', () => {
 
     db.query(query, (err, result) => {
         if (err) {
-            console.error('Error deleting expired notices:', err);
+            console.error(`${nowIST()} Error deleting expired notices:`, err);
         } else {
-            console.log(`Deleted ${result.affectedRows} expired notices.`);
+            console.log(`${nowIST()} Deleted ${result.affectedRows} expired notices.`);
         }
     });
 });
